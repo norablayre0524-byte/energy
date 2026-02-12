@@ -1,0 +1,72 @@
+---
+title: "Energy"
+author: "Nora Stanley"
+date: "2026-02-10"
+output: html_document
+---
+##Renewable Energy Dataset
+```{r}
+library(readr)
+energy<-read_csv('../../data/IRENA data.csv', skip=1)
+
+```
+
+## Gapminder Dataset
+```{r}
+library(gapminder)
+library(dplyr)
+data(gapminder)
+gapminder%>%head
+```
+
+##Carbon emmissions
+```{r}
+library(dplyr)
+library(readr)
+
+
+url <-'https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.csv'
+
+carbon <-
+  read_csv(url) %>%
+  select(country,
+         year,
+         pop = population,
+         gdp,
+         co2,
+         hist_co2 = cumulative_co2)
+```
+
+##Levelized cost of energy
+```{r}
+library(readr)
+url <- 'https://raw.githubusercontent.com/ericmkeen/sewanee_esus/master/02_energy_sector/levelized-cost-of-energy.csv'
+econ <- read_csv(url)
+```
+
+
+```{r}
+library(ggplot2)
+
+ggplot(econ,
+       aes(x=year,
+           y=cost,
+           color=source))+
+  geom_point()+
+  geom_hline(yintercept=0.05, lty=2)+###lty=dashed and thickness
+  geom_hline(yintercept = 0.18, lty=2)+
+  annotate(geom='text',
+           x=1990,y=0.1,
+           size=3,
+           label='Range of fissil fuel costs')#n breaks the line for captions on the graph if too long
+```
+
+```{r}
+library(dplyr)
+library(knitr)
+econ%>%
+  filter(year== 2020)%>%
+  group_by(source)%>%
+  summarize(cost=mean(cost, na.rm=TRUE))%>%
+  kable
+```
