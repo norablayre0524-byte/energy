@@ -44,16 +44,70 @@ library(dplyr)
 library(readr)
 library(ggplot2)
 library(plotly)
-
+library(ggthemes)
 url <-'https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.csv'
-
 carbon <-
   read_csv(url) 
 View(carbon)
-carbi<-carbon%>%
-  filter(year==2023,is.na=TRUE)
+carbon<-carbon%>%
+  mutate(gdp_per_capita=gdp/population)
+high_gdp<-c("United States","Qatar","Norway","Singapore","United Arab Emirates",
+            "Switzerland","Ireland","Luxembourg","Saudi Arabia","Taiwan")
+low_gdp<-c("Burundi","Central Africa Republic","Liberia","Democratic Republic of Congo",
+           "Mozambique","Niger","Madagascar","Malwai","Chad","Afghanistan")
+carbon_groups<-carbon%>%
+  mutate(group=case_when(
+    country=="World"~"World",
+    country%in%high_gdp~"High GDP",
+    country %in%low_gdp~"Low GDP",
+    TRUE~NA_character_))%>%
+  filter(!is.na(group))
+
+carbon_trend<-carbon_groups%>%
+  group_by(year,group)%>%
+  summarise(
+    mean_temp=mean(temperature_change_from_ghg, na.rm=TRUE),
+    max_temp=max(temperature_change_from_ghg, na.rm=TRUE),
+    min_temp=min(temperature_change_from_ghg, na.rm=TRUE),
+    .groups="drop")
+y_max<-1
+
+ggplot()+
+  geom_line(data=carbon_trend,
+            aes(x=year,y=mean_temp,color=group),
+            size=1.0,
+            alpha=0.75)+
+  scale_x_continuous(limits=c(1850,max(carbon_trend$year)))+
+  labs(Title="Temperature Change from Greenhouse Gases",
+       x="Year",
+       y="Temperature Change",
+       color="Group",
+       fill="Group")
  #TEMP CHANGE FROM GHGS
-carbon%>%head
+```
+```{r}
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(plotly)
+library(ggthemes)
+url <-'https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.csv'
+carbon <-
+  read_csv(url)
+
+carbon_groups<-carbon%>%
+  mutate(group=case_when(
+    country=="World"~"World",
+    country%in%high_gdp~"High GDP",
+    country %in%low_gdp~"Low GDP",
+    TRUE~NA_character_))%>%
+  filter(!is.na(group))
+
+high_gdp<-c("United States","Qatar","Norway","Singapore","United Arab Emirates",
+            "Switzerland","Ireland","Luxembourg","Saudi Arabia","Taiwan")
+low_gdp<-c("Burundi","Central Africa Republic","Liberia","Democratic Republic of Congo",
+           "Mozambique","Niger","Madagascar","Malwai","Chad","Afghanistan")
+
 ```
 
 ##Levelized cost of energy
