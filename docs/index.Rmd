@@ -15,26 +15,45 @@ energy<-read_csv('../../data/IRENA data.csv', skip=1)
 ```{r}
 library(gapminder)
 library(dplyr)
+library(ggplot2)
 data(gapminder)
 gapminder%>%head
+gap<-gapminder%>%
+  filter(country %in% c('United States', 'China', 'France','Liberia','Ethiopia','Haiti'))%>%
+  filter(year>1970)
+ggplot(gap,
+       aes(x=year, 
+           y=lifeExp,
+           color=country,
+           linetype=country))+
+  geom_line(size=1, alpha=0.5)+
+  scale_linetype_manual(values=c("China"="solid","France"="solid","United States"="solid",
+                        "Ethiopia"="dashed","Haiti"="dashed","Liberia"="dashed")) +
+  labs(title = "Life Expectancy for Developed and Undeveloped Countries Over Time",
+  x = "Year",
+  y = "Life Expectancy")
+View(gapminder)
+gapminder%>%
+  filter(year == 2007)%>%
+   slice_min(order_by = gdpPercap, n=5)
 ```
 
 ##Carbon emmissions
 ```{r}
 library(dplyr)
 library(readr)
-
+library(ggplot2)
+library(plotly)
 
 url <-'https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.csv'
 
 carbon <-
-  read_csv(url) %>%
-  select(country,
-         year,
-         pop = population,
-         gdp,
-         co2,
-         hist_co2 = cumulative_co2)
+  read_csv(url) 
+View(carbon)
+carbi<-carbon%>%
+  filter(year==2023,is.na=TRUE)
+ #TEMP CHANGE FROM GHGS
+carbon%>%head
 ```
 
 ##Levelized cost of energy
@@ -42,12 +61,14 @@ carbon <-
 library(readr)
 url <- 'https://raw.githubusercontent.com/ericmkeen/sewanee_esus/master/02_energy_sector/levelized-cost-of-energy.csv'
 econ <- read_csv(url)
+econ%>%head
+View(energy)
 ```
 
 
 ```{r}
 library(ggplot2)
-
+View(econ)
 ggplot(econ,
        aes(x=year,
            y=cost,
@@ -70,3 +91,5 @@ econ%>%
   summarize(cost=mean(cost, na.rm=TRUE))%>%
   kable
 ```
+
+
