@@ -5,12 +5,13 @@ date: "2026-02-10"
 output: html_document
 ---
 ##Renewable Energy Dataset
-```{r}
+```{r,fig.height=7,fig.width=10}
 library(readr)
 library(dplyr)
 library(ggplot2)
+library(plotly)
+library(ggthemes)
 energy<-read_csv('../../data/IRENA data.csv', skip=1)
-View(energy)
 
 energy_2<-energy%>%
   rename(country='Country/area')
@@ -44,14 +45,19 @@ energy_groups_sdg<-energy_groups_sdg%>%
 energy_groups_no_total<-energy_groups_sdg%>%
   filter(!Technology%in%c("Total renewable","Total non-renewable","Total"))
 
-ggplot(energy_groups_no_total,
+energy_graph<-ggplot(energy_groups_no_total,
        aes(x=group,
            y=total,
            fill=Technology))+
-  geom_col(position="fill")+
+  geom_col(position="fill",size=0.01)+
   scale_y_continuous(labels=scales::percent)+
   facet_wrap(~Year)+
-  coord_flip()
+  coord_flip()+
+labs(title="Energy Breakdown for Developed and Developing Countries",
+     x="Development Status of Countries",
+     y="Percent of Energy Type")+
+  theme_dark()
+ggplotly(energy_graph)
 
 ```
 
@@ -64,22 +70,22 @@ data(gapminder)
 gapminder%>%head
 gap<-gapminder%>%
   filter(country %in% c('United States', 'China', 'France','Liberia','Ethiopia','Haiti'))%>%
-  filter(year>1970)
+  filter(year>1970) %>% 
+  mutate(status = ifelse(country %in% c('United States', 'China', 'France'), 'Developed', 'Developing'))
+
 ggplot(gap,
        aes(x=year, 
            y=lifeExp,
            color=country,
-           linetype=country))+
+           linetype=status)) +
   geom_line(size=1, alpha=0.5)+
-  scale_linetype_manual(values=c("China"="solid","France"="solid","United States"="solid",
-                        "Ethiopia"="dashed","Haiti"="dashed","Liberia"="dashed")) +
+ #scale_linetype_manual(values=c("China"="solid","France"="solid","United States"="solid",
+  #                     "Ethiopia"="dashed","Haiti"="dashed","Liberia"="dashed")) +
   labs(title = "Life Expectancy for Developed and Undeveloped Countries Over Time",
   x = "Year",
-  y = "Life Expectancy")
-View(gapminder)
-gapminder%>%
-  filter(year == 2007)%>%
-   slice_min(order_by = gdpPercap, n=5)
+  y = "Life Expectancy")+
+  theme_clean()
+
 ```
 
 ##Carbon emmissions
@@ -92,7 +98,6 @@ library(ggthemes)
 url <-'https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.csv'
 carbon <-
   read_csv(url) 
-View(carbon)
 carbon<-carbon%>%
   mutate(gdp_per_capita=gdp/population)
 high_gdp<-c("United States","Qatar","Norway","Singapore","United Arab Emirates",
@@ -118,8 +123,7 @@ carbon_trend<-carbon_groups%>%
   group_by(year,group)%>%
   summarise(mean_temp=mean(temperature_change_from_ghg, na.rm=TRUE),
             .groups="drop")
-
-ggplot(carbon_trend,
+plot_1<-ggplot(carbon_trend,
        aes(x=year,y=mean_temp,color=group))+
   geom_line(size=1)+
   geom_vline(xintercept=2012,
@@ -129,10 +133,22 @@ ggplot(carbon_trend,
   labs(title="Average Temperature Change from Greenhouse Gas Emmissions",
        x="Year",
        y="Temperature Change",
-       color="Key")
+       color="Key")+
+  labs(title="Average emperature Change from Greenhouse Gas Emmissions",
+       x="Temperature Change from Gas Emmissions",
+       y="Development of Countries")+
+  annotate(geom='text',
+           x=1985,
+           y=.005,
+           size=3,
+           label='Year when SDGs
+     were created')+
+  theme_minimal()
 
  #TEMP CHANGE FROM GHGS
+
 ```
+
 ```{r}
 library(dplyr)
 library(readr)
@@ -167,8 +183,7 @@ carbon_trend<-carbon_groups%>%
   group_by(year,group)%>%
   summarise(mean_temp=mean(temperature_change_from_ghg, na.rm=TRUE),
             .groups="drop")
-
-ggplot(carbon_trend,
+plot_2<-ggplot(carbon_trend,
        aes(x=year,y=mean_temp,color=group))+
   geom_line(size=1)+
   geom_vline(xintercept=2012,
@@ -178,7 +193,20 @@ ggplot(carbon_trend,
   labs(title="Average Temperature Change from Greenhouse Gas Emmissions",
        x="Year",
        y="Temperature Change",
-       color="Key")
+       color="Key")+
+  annotate(geom='text',
+           x=2008,
+           y=0.005,
+           size=3,
+           label='Year when SDGs
+     were created')+
+  theme_minimal()
+```
+
+```{r,fig.height=5,fig.width=11}
+library(ggpubr)
+ggarrange(plot_1,plot_2,nrow=1)+
+  labs(title="Average Temperature Change from Greenhouse Gases from Developed and Developing Countries")
 
 ```
 
@@ -198,9 +226,9 @@ econ%>%head
 library(ggplot2)
 library(dplyr)
 library(readr)
+library(ggthemes)
 url <- 'https://raw.githubusercontent.com/ericmkeen/sewanee_esus/master/02_energy_sector/levelized-cost-of-energy.csv'
 econ <- read_csv(url)
-View(econ)
 #cost of renewable and non-renewable sources
 econ_filtered<-econ%>%
   filter(country%in% c("United States","France","Sweden","Germany","Japan","China","South Korea","United Kingdom","Netherlands","Denmark"))
@@ -214,21 +242,27 @@ p<-ggplot(econ_filtered,
                       "<br>source:",source,
                       "<br>cost:",round(cost,2))))+
   geom_point()+
-  geom_vline(xintercept=2012)
-ggplotly(p,tooltip="text")
-  
-
+  geom_vline(xintercept=2012)+
+  labs(title="Cost and Use of Energy Types for Developed Countries",
+       x="Year",
+       y="Cost",
+       color="Energy Source")
   annotate(geom='text',
-           x=1990,y=0.1,
+           x=2003,y=0.52,
            size=3,
-           label='Range of fissil fuel costs')#n breaks the line for captions on the graph if too long
+           label='Year when SDGs were created')
+  
+ggplotly(p,tooltip="text")
+
 ```
 
 ```{r}
 library(dplyr)
 library(knitr)
-econ%>%
-  group_by(country)%>%
+econ_filtered<-econ%>%
+  filter(country%in% c("United States","France","Sweden","Germany","Japan","China","South Korea","United Kingdom","Netherlands","Denmark"))
+econ_filtered%>%
+  group_by(year,country)%>%
   summarize(cost=mean(cost, na.rm=TRUE))%>%
   kable
 ```
