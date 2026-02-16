@@ -7,7 +7,51 @@ output: html_document
 ##Renewable Energy Dataset
 ```{r}
 library(readr)
+library(dplyr)
+library(ggplot2)
 energy<-read_csv('../../data/IRENA data.csv', skip=1)
+View(energy)
+
+energy_2<-energy%>%
+  rename(country='Country/area')
+
+high_gdp<-c("United States","Qatar","Norway","Singapore","United Arab Emirates",
+            "Switzerland","Ireland","Luxembourg","Saudi Arabia","Taiwan")
+low_gdp<-c("Burundi","Central Africa Republic","Liberia","Democratic Republic of Congo",
+           "Mozambique","Niger","Madagascar","Malwai","Chad","Afghanistan")
+energy_2$`Electricity statistics`<-
+  as.numeric(gsub("-",NA,energy_2$`Electricity statistics`))
+world<-energy_2%>%
+  group_by(Technology,`Data Type`,`Grid connection`,Year)%>%
+  summarise(`Electricity statistics`=sum(`Electricity statistics`,na.rm=TRUE),
+            .groups="drop")%>%
+  mutate('country'="World")
+energy_2<-bind_rows(energy_2,world)
+
+energy_groups<-energy_2%>%
+  mutate(group=case_when(
+    country=="World"~"World",
+    country%in%high_gdp~"High GDP",
+    country %in%low_gdp~"Low GDP",
+    TRUE~NA_character_))%>%
+  filter(!is.na(group))
+energy_groups_sdg<-energy_groups%>%
+  filter(Year%in% c(2012,2023))
+energy_groups_sdg<-energy_groups_sdg%>%
+  group_by(group,Year,Technology)%>%
+  summarise(total=sum(`Electricity statistics`, na.rm=TRUE),
+            .groups="drop")
+energy_groups_no_total<-energy_groups_sdg%>%
+  filter(!Technology%in%c("Total renewable","Total non-renewable","Total"))
+
+ggplot(energy_groups_no_total,
+       aes(x=group,
+           y=total,
+           fill=Technology))+
+  geom_col(position="fill")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_wrap(~Year)+
+  coord_flip()
 
 ```
 
@@ -144,7 +188,7 @@ library(readr)
 url <- 'https://raw.githubusercontent.com/ericmkeen/sewanee_esus/master/02_energy_sector/levelized-cost-of-energy.csv'
 econ <- read_csv(url)
 econ%>%head
-View(energy)
+
 ```
 
 
