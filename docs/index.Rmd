@@ -63,26 +63,30 @@ carbon_groups<-carbon%>%
     TRUE~NA_character_))%>%
   filter(!is.na(group))
 
+carbon_wo_world<-carbon%>%
+  filter(country!="World")
+carbon_groups<-carbon_wo_world%>%
+  mutate(group=case_when(
+    country%in%high_gdp~"High GDP",
+    country%in%low_gdp~"Low GDP",
+    TRUE~"World"))
 carbon_trend<-carbon_groups%>%
   group_by(year,group)%>%
-  summarise(
-    mean_temp=mean(temperature_change_from_ghg, na.rm=TRUE),
-    max_temp=max(temperature_change_from_ghg, na.rm=TRUE),
-    min_temp=min(temperature_change_from_ghg, na.rm=TRUE),
-    .groups="drop")
-y_max<-1
+  summarise(mean_temp=mean(temperature_change_from_ghg, na.rm=TRUE),
+            .groups="drop")
 
-ggplot()+
-  geom_line(data=carbon_trend,
-            aes(x=year,y=mean_temp,color=group),
-            size=1.0,
-            alpha=0.75)+
-  scale_x_continuous(limits=c(1850,max(carbon_trend$year)))+
-  labs(Title="Temperature Change from Greenhouse Gases",
+ggplot(carbon_trend,
+       aes(x=year,y=mean_temp,color=group))+
+  geom_line(size=1)+
+  geom_vline(xintercept=2012,
+             linetype ="dashed",
+             size=0.5)+
+    scale_x_continuous(limits=c(1850,max(carbon_trend$year)))+
+  labs(title="Average Temperature Change from Greenhouse Gas Emmissions",
        x="Year",
        y="Temperature Change",
-       color="Group",
-       fill="Group")
+       color="Key")
+
  #TEMP CHANGE FROM GHGS
 ```
 ```{r}
@@ -107,6 +111,30 @@ high_gdp<-c("United States","Qatar","Norway","Singapore","United Arab Emirates",
             "Switzerland","Ireland","Luxembourg","Saudi Arabia","Taiwan")
 low_gdp<-c("Burundi","Central Africa Republic","Liberia","Democratic Republic of Congo",
            "Mozambique","Niger","Madagascar","Malwai","Chad","Afghanistan")
+carbon_wo_world<-carbon%>%
+  filter(country!="World")
+
+carbon_groups<-carbon_wo_world%>%
+  mutate(group=case_when(
+    country%in%high_gdp~"High GDP",
+    country%in%low_gdp~"Low GDP",
+    TRUE~"World"))
+carbon_trend<-carbon_groups%>%
+  group_by(year,group)%>%
+  summarise(mean_temp=mean(temperature_change_from_ghg, na.rm=TRUE),
+            .groups="drop")
+
+ggplot(carbon_trend,
+       aes(x=year,y=mean_temp,color=group))+
+  geom_line(size=1)+
+  geom_vline(xintercept=2012,
+             linetype ="dashed",
+             size=0.5)+
+    scale_x_continuous(limits=c(2000,max(carbon_trend$year)))+
+  labs(title="Average Temperature Change from Greenhouse Gas Emmissions",
+       x="Year",
+       y="Temperature Change",
+       color="Key")
 
 ```
 
