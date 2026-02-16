@@ -49,7 +49,7 @@ energy_graph<-ggplot(energy_groups_no_total,
        aes(x=group,
            y=total,
            fill=Technology))+
-  geom_col(position="fill",size=0.01)+
+  geom_col(position="fill",width=0.3)+
   scale_y_continuous(labels=scales::percent)+
   facet_wrap(~Year)+
   coord_flip()+
@@ -130,13 +130,9 @@ plot_1<-ggplot(carbon_trend,
              linetype ="dashed",
              size=0.5)+
     scale_x_continuous(limits=c(1850,max(carbon_trend$year)))+
-  labs(title="Average Temperature Change from Greenhouse Gas Emmissions",
-       x="Year",
+  labs(x="Year",
        y="Temperature Change",
        color="Key")+
-  labs(title="Average emperature Change from Greenhouse Gas Emmissions",
-       x="Temperature Change from Gas Emmissions",
-       y="Development of Countries")+
   annotate(geom='text',
            x=1985,
            y=.005,
@@ -190,8 +186,7 @@ plot_2<-ggplot(carbon_trend,
              linetype ="dashed",
              size=0.5)+
     scale_x_continuous(limits=c(2000,max(carbon_trend$year)))+
-  labs(title="Average Temperature Change from Greenhouse Gas Emmissions",
-       x="Year",
+  labs(x="Year",
        y="Temperature Change",
        color="Key")+
   annotate(geom='text',
@@ -205,8 +200,8 @@ plot_2<-ggplot(carbon_trend,
 
 ```{r,fig.height=5,fig.width=11}
 library(ggpubr)
-ggarrange(plot_1,plot_2,nrow=1)+
-  labs(title="Average Temperature Change from Greenhouse Gases from Developed and Developing Countries")
+ggarrange(plot_1,plot_2,nrow=1)%>%
+  annotate_figure(top=text_grob("Average Temperature Change from Greenhouse Gases from Developed and Developing Countries",size=15))
 
 ```
 
@@ -246,7 +241,7 @@ p<-ggplot(econ_filtered,
   labs(title="Cost and Use of Energy Types for Developed Countries",
        x="Year",
        y="Cost",
-       color="Energy Source")
+       color="Energy Source")+
   annotate(geom='text',
            x=2003,y=0.52,
            size=3,
