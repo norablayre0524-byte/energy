@@ -189,19 +189,35 @@ url <- 'https://raw.githubusercontent.com/ericmkeen/sewanee_esus/master/02_energ
 econ <- read_csv(url)
 econ%>%head
 
+
+
 ```
 
 
 ```{r}
 library(ggplot2)
+library(dplyr)
+library(readr)
+url <- 'https://raw.githubusercontent.com/ericmkeen/sewanee_esus/master/02_energy_sector/levelized-cost-of-energy.csv'
+econ <- read_csv(url)
 View(econ)
-ggplot(econ,
+#cost of renewable and non-renewable sources
+econ_filtered<-econ%>%
+  filter(country%in% c("United States","France","Sweden","Germany","Japan","China","South Korea","United Kingdom","Netherlands","Denmark"))
+            
+p<-ggplot(econ_filtered,
        aes(x=year,
            y=cost,
-           color=source))+
+           color=factor(source),
+           text=paste("country:",country,
+                      "<br>year:",year,
+                      "<br>source:",source,
+                      "<br>cost:",round(cost,2))))+
   geom_point()+
-  geom_hline(yintercept=0.05, lty=2)+###lty=dashed and thickness
-  geom_hline(yintercept = 0.18, lty=2)+
+  geom_vline(xintercept=2012)
+ggplotly(p,tooltip="text")
+  
+
   annotate(geom='text',
            x=1990,y=0.1,
            size=3,
@@ -212,8 +228,7 @@ ggplot(econ,
 library(dplyr)
 library(knitr)
 econ%>%
-  filter(year== 2020)%>%
-  group_by(source)%>%
+  group_by(country)%>%
   summarize(cost=mean(cost, na.rm=TRUE))%>%
   kable
 ```
