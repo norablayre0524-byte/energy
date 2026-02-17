@@ -286,7 +286,8 @@ The cost of energy types is an important metric to analyze when understanding th
 - Netherlands
 - Denmark
 
-The plot also marks the point in time in which the SDGs were created and some of the most current data of natural gas prices provided by Global Petrol Prices. Natural gas was seen as the most used source of energy for developed countries in Figure 3 and the second most used source of energy worldwide in 2023.
+The plot also marks the point in time in which the SDGs were created and some of the most current data of natural gas prices provided by Global Petrol Prices. Natural gas was seen as the most used source of energy for developed countries in [figure 3] 
+(#Energy-Distribution)the second most used source of energy worldwide in 2023.
 
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE}
