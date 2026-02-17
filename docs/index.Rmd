@@ -1,11 +1,218 @@
 ---
-title: "Energy"
+title: "Progress of the Sustainable Development Goals"
 author: "Nora Stanley"
 date: "2026-02-10"
 output: html_document
 ---
-##Renewable Energy Dataset
-```{r,fig.height=7,fig.width=10}
+
+# Introduction
+This series of data can be used to understand how much progress had been made in certain SDGs. Specifically, the data connects to the following SDGs:
+
+7) Affordable and Clean Energy
+11) Sustainable Cities and Communities
+12) Responsible Consumption and Production
+13) Climate Action
+12) Partnerhsips for the Goals
+
+Taking these goals into account as well as their sub-targets, we can understand which areas have made marginal gains, which areas have made minimal gains, and which ones have made no gains or even regressed. This is most meaningful when considering the whole picture of the UN’s fight for a sustainable future as all areas must be addressed to be successful.
+
+# The Story: Determining Progress of the SDGs
+
+## *Social Progress*
+
+  While the datasets utilized as a whole do not provide many trackers on race, gender, and wealth equality, the gapminder dataset provides a statistic on life expectancy. This statistic could be used as an indicator for SDG #3 (good health and well-being). If efficient work has been done in this sector, it will be reflected in an increased life expectancy for all countries and a gap being bridged between developed countries and developing countries. Distinguishing between these two types of countries is very important as the UN repeatedly highlights the need for developed countries to aid developing countries in their efforts to meet the SDGs. In figure 1., the average life expectancy for citizens of 3 developed countries, the United States, France, an China, and 3 developing countries, Haiti, Ethiopia, and Liberia, across time is shown. 
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+library(gapminder)
+library(dplyr)
+library(ggplot2)
+library(ggthemes)
+data(gapminder)
+gap<-gapminder%>%
+  filter(country %in% c('United States', 'China', 'France','Liberia','Ethiopia','Haiti'))%>%
+  filter(year>1970) %>% 
+  mutate(status = ifelse(country %in% c('United States', 'China', 'France'), 'Developed', 'Developing'))
+    
+ggplot(gap,
+       aes(x=year, 
+           y=lifeExp,
+           color=country,
+           linetype=status)) +
+  geom_line(size=1, alpha=0.5)+
+  labs(title = "Life Expectancy for Developed and Undeveloped Countries Over Time",
+  x = "Year",
+  y = "Life Expectancy",
+  caption="Figure 1")+
+  theme_clean()
+```
+
+  The gapminder dataset which pulled this information only has data until 2007, 5 years before the SDGs were created; however, it can still be an important tool as a snapshot of pre-SDG conditions which can be compared to current day conditions. The UN hoped SDGS would incentivize  countries to improve their health standards and disease control to be in accordance with SDG #3 (good health and well-being), and we can look at the most recent data for life expectancy to see if it’s done exactly that. The World Bank Group supplies information about the life expectancy for each of these countries in 2023: the United States and China had a life expectancy of 78, France had a life expectancy of 83, Ethiopia had a life expectancy of 67, Haiti had a life expectancy of 65, and Liberia had a life expectancy of 62). So, from this data it;s apparent that there was improvement in life expectancy in each country from 2007 to 2023, especially in Haiti and Liberia. Although the changes can’t be pinpointed to the SDGs, there is no doubt progress was made between these years. Additionally, this data reflects a huge gap bridged between the life expectancy of developed countries and that of developing countries. Even though these leaps might not be due to the SDGs, the data still indicates that this set of countries is on track to meet subtargets 3.1, 3.3, 3.9, and 3.d which have to do with reducing maternal mortality death rates, disease related death rates,and  air, water, and soil pollution associated death rates to a certain amount each by 2030. Sub-target 3.d is related to equipping countries, especially developing countries, with resources to combat threats to global health, and the decreased difference between life expectancy of the developed and developing countries between 2007 and 2023 suggest that adequate work is being done in that area. Overall, the plot in combination with the most recent life expectancy values propose that this set of countries is working to meet SPD #3 aims. They could be used to show general trends for all developed and developing countries, but because the sample size is so small, these trends should not be considered concrete when looking at the rest of the world.
+
+
+## *Effects of Emissions*
+
+One of the main concerns with climate change is greenhouse gas emissions and how they affect our environment. Species on Earth depend on relatively specific conditions like land temperature, food availability, chemical availability, air quality, water temperature, etc, and excessive greenhouse gases in the atmosphere can disrupt all of these things. A key metric used to measure the effect of greenhouse gases is the temperature change on Earth as a result of their presence in the atmosphere. Small temperature changes can disrupt entire ecosystems in the long-term if they are not addressed. Figure 2. Shows the temperature change average across time for developed countries, developing countries, and the whole world, noting the point in time in which the SDGs were created. The developed countries are as follows:
+
+- United States
+- Qatar
+- Norway
+- Singapore
+- United Arab Emirates
+- Switzerland
+- Ireland
+_Luxembourg
+- Saudi Arabia
+- Taiwan
+
+The developing countries are as follows:
+- Burundi
+- Central Africa Republic
+- Liberia
+- Democratic Republic of Congo
+- Mozambique
+- Niger
+- Madagascar
+- Malawi
+- Chad
+- Afghanistan
+
+ It’s important to note that the developed countries are categorized into the countries with the highest recent GDP per capita in this data set and the developing countries are categorized into the countries with the lowest recent GDP per capita in the data set. GDP per capita isn’t always the best metric to determine the development status of a country, but it’s the best indicator included within the carbon data set. Fig 2a shows the temperature change induced by greenhouse gases for low GDP per capita countries, high GDP per capita countries, and the world since 1850 and fig 2b shows the same data since 2000.
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(plotly)
+library(ggthemes)
+url <-'https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.csv'
+carbon <-
+  read_csv(url) 
+carbon<-carbon%>%
+  mutate(gdp_per_capita=gdp/population)
+high_gdp<-c("United States","Qatar","Norway","Singapore","United Arab Emirates",
+            "Switzerland","Ireland","Luxembourg","Saudi Arabia","Taiwan")
+low_gdp<-c("Burundi","Central Africa Republic","Liberia","Democratic Republic of Congo",
+           "Mozambique","Niger","Madagascar","Malwai","Chad","Afghanistan")
+carbon_groups<-carbon%>%
+  mutate(group=case_when(
+    country=="World"~"World",
+    country%in%high_gdp~"High GDP",
+    country %in%low_gdp~"Low GDP",
+    TRUE~NA_character_))%>%
+  filter(!is.na(group))
+
+carbon_wo_world<-carbon%>%
+  filter(country!="World")
+carbon_groups<-carbon_wo_world%>%
+  mutate(group=case_when(
+    country%in%high_gdp~"High GDP
+ Per Capita",
+    country%in%low_gdp~"Low GDP
+ Per Capita",
+    TRUE~"World"))
+carbon_trend<-carbon_groups%>%
+  group_by(year,group)%>%
+  summarise(mean_temp=mean(temperature_change_from_ghg, na.rm=TRUE),
+            .groups="drop")
+plot_1<-ggplot(carbon_trend,
+       aes(x=year,y=mean_temp,color=group))+
+  geom_line(size=1)+
+  geom_vline(xintercept=2012,
+             linetype ="dashed",
+             size=0.5)+
+    scale_x_continuous(limits=c(1850,max(carbon_trend$year)))+
+  labs(x="Year",
+       y="Temperature Change (°C)",
+       color="Key",
+       caption="Figure 2a")+
+  annotate(geom='text',
+           x=1985,
+           y=.005,
+           size=3,
+           label='Year when SDGs
+     were created')+
+  theme_minimal()
+
+ #TEMP CHANGE FROM GHGS
+
+```
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(plotly)
+library(ggthemes)
+url <-'https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.csv'
+carbon <-
+  read_csv(url)
+
+carbon_groups<-carbon%>%
+  mutate(group=case_when(
+    country=="World"~"World",
+    country%in%high_gdp~"High GDP
+    Per Capita",
+    country %in%low_gdp~"Low GDP
+    Per Capita",
+    TRUE~NA_character_))%>%
+  filter(!is.na(group))
+
+high_gdp<-c("United States","Qatar","Norway","Singapore","United Arab Emirates",
+            "Switzerland","Ireland","Luxembourg","Saudi Arabia","Taiwan")
+low_gdp<-c("Burundi","Central Africa Republic","Liberia","Democratic Republic of Congo",
+           "Mozambique","Niger","Madagascar","Malwai","Chad","Afghanistan")
+carbon_wo_world<-carbon%>%
+  filter(country!="World")
+
+carbon_groups<-carbon_wo_world%>%
+  mutate(group=case_when(
+    country%in%high_gdp~"High GDP 
+    Per Capita",
+    country%in%low_gdp~"Low GDP
+    Per Capita",
+    TRUE~"World"))
+carbon_trend<-carbon_groups%>%
+  group_by(year,group)%>%
+  summarise(mean_temp=mean(temperature_change_from_ghg, na.rm=TRUE),
+            .groups="drop")
+plot_2<-ggplot(carbon_trend,
+       aes(x=year,y=mean_temp,color=group))+
+  geom_line(size=1)+
+  geom_vline(xintercept=2012,
+             linetype ="dashed",
+             size=0.5)+
+    scale_x_continuous(limits=c(2000,max(carbon_trend$year)))+
+  labs(x="Year",
+       y="Temperature Change (°C)",
+       color="Key",
+       caption="Figure 2b")+
+  annotate(geom='text',
+           x=2008,
+           y=0.005,
+           size=3,
+           label='Year when SDGs
+     were created')+
+  theme_minimal()
+```
+
+```{r,fig.height=5,fig.width=11,echo=FALSE,message=FALSE,warning=FALSE}
+library(ggpubr)
+ggarrange(plot_1,plot_2,nrow=1)%>%
+  annotate_figure(top=text_grob("Average Temperature Change from Greenhouse Gases from Developed and Developing Countries",size=15))
+
+```
+
+  It’s clear that the trends are not changing before and after when the SDGs were created, meaning that, in general, all countries are not taking appropriate action to mitigate impacts of greenhouse gases. This suggests that greenhouse gas emissions are not being reduced, as well. In addition, high GDP per capita or developed countries are disproportionately contributing to the problem compared to low GDP per capita or developing countries. These indicators are signs that both developed and developing countries are not on track to meet the targets associated with SDG #12 (responsible consumption and production) and SDG #13 (climate action), and developed countries are not playing their part in assisting developing countries. The difference between the developed countries contribution to the problem and the developing countries contribution to the problem means that SDG #17(partnerships for the goals) is being neglected in these sectors too. In the area of improving environmental impacts, all countries are falling short.
+
+
+## *Energy Distribution*
+
+  One of the essential ways the time of energy transition needs to change to create a sustainable future is using renewable energy and energy that doesn’t require greenhouse gases to be emitted when it is being sourced or consumed. Therefore, one way we can measure environmental progress in the SDGs is by looking at the breakdown of how much of each energy type countries are using now compared to the past. Figure 3 shows the energy breakdown for the same set of developed countries and developing countries as well as worldwide data for 2012, when the SDGs were put in place, and 2023, the most recent data from the energy data set.
+
+
+```{r,fig.height=7,fig.width=10,echo=FALSE,message=FALSE,warning=FALSE}
 library(readr)
 library(dplyr)
 library(ggplot2)
@@ -49,175 +256,40 @@ energy_graph<-ggplot(energy_groups_no_total,
        aes(x=group,
            y=total,
            fill=Technology))+
-  geom_col(position="fill",width=0.3)+
+  geom_col(position="fill",width=0.5)+
   scale_y_continuous(labels=scales::percent)+
   facet_wrap(~Year)+
   coord_flip()+
 labs(title="Energy Breakdown for Developed and Developing Countries",
      x="Development Status of Countries",
-     y="Percent of Energy Type")+
+     y="Percent of Energy Type",
+     subtitle="Figure 3")+
   theme_dark()
 ggplotly(energy_graph)
 
 ```
 
-## Gapminder Dataset
-```{r}
-library(gapminder)
-library(dplyr)
-library(ggplot2)
-data(gapminder)
-gapminder%>%head
-gap<-gapminder%>%
-  filter(country %in% c('United States', 'China', 'France','Liberia','Ethiopia','Haiti'))%>%
-  filter(year>1970) %>% 
-  mutate(status = ifelse(country %in% c('United States', 'China', 'France'), 'Developed', 'Developing'))
+  When examining the graph, it can be understood that worldwide and in low GDP/developing countries marginal gains in using more renewable energy and less non-renewable energy have been made; however, high GDP/developed countries have actually regressed and now using more no-renewable energy than when the SDGs were introduced. This means that shifts toward renewable energy and reducing energy-consumption related emissions are not on track to reach the sub-targets of SDG #12 (responsible consumption and production) and SDG #13 (climate action) by 2030. Key points of the sub-targets in both of these SDGs are encouraging worldwide climate progress and countries incentivizing one another to move towards sustainable energy practices, and it’s clear from Figure 3 that neither of these points are being addressed adequately. Furthermore, developed countries with the most resources to make change are not doing their part in leading the shift towards a sustainable future in energy transition which means they can’t effectively aid developing countries in making significant progress. This lack of leadership also signals that SDG #17 (partnerships for the goals) is not being met, and SDG #11 (sustainable cities and communities) is not seeing enough progress because it is not being reflected in the global and national scale data provided by Figure 3. Considering the full picture, not enough meaningful progress is being made to combat energy-consumption related emissions and overuse of non-renewable energy sources.
 
-ggplot(gap,
-       aes(x=year, 
-           y=lifeExp,
-           color=country,
-           linetype=status)) +
-  geom_line(size=1, alpha=0.5)+
- #scale_linetype_manual(values=c("China"="solid","France"="solid","United States"="solid",
-  #                     "Ethiopia"="dashed","Haiti"="dashed","Liberia"="dashed")) +
-  labs(title = "Life Expectancy for Developed and Undeveloped Countries Over Time",
-  x = "Year",
-  y = "Life Expectancy")+
-  theme_clean()
+## *Cost of Energy*
 
-```
+The cost of energy types is an important metric to analyze when understanding the capacity of countries to shift towards renewable energy sources. Figure 4 illustrates the cost of certain renewable energy sources over time for the following set of developed countries:
 
-##Carbon emmissions
-```{r}
-library(dplyr)
-library(readr)
-library(ggplot2)
-library(plotly)
-library(ggthemes)
-url <-'https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.csv'
-carbon <-
-  read_csv(url) 
-carbon<-carbon%>%
-  mutate(gdp_per_capita=gdp/population)
-high_gdp<-c("United States","Qatar","Norway","Singapore","United Arab Emirates",
-            "Switzerland","Ireland","Luxembourg","Saudi Arabia","Taiwan")
-low_gdp<-c("Burundi","Central Africa Republic","Liberia","Democratic Republic of Congo",
-           "Mozambique","Niger","Madagascar","Malwai","Chad","Afghanistan")
-carbon_groups<-carbon%>%
-  mutate(group=case_when(
-    country=="World"~"World",
-    country%in%high_gdp~"High GDP",
-    country %in%low_gdp~"Low GDP",
-    TRUE~NA_character_))%>%
-  filter(!is.na(group))
+- United States
+- France
+- Sweden
+- Germany
+- Japan
+- China
+- South Korea
+- United Kingdom
+- Netherlands
+- Denmark
 
-carbon_wo_world<-carbon%>%
-  filter(country!="World")
-carbon_groups<-carbon_wo_world%>%
-  mutate(group=case_when(
-    country%in%high_gdp~"High GDP",
-    country%in%low_gdp~"Low GDP",
-    TRUE~"World"))
-carbon_trend<-carbon_groups%>%
-  group_by(year,group)%>%
-  summarise(mean_temp=mean(temperature_change_from_ghg, na.rm=TRUE),
-            .groups="drop")
-plot_1<-ggplot(carbon_trend,
-       aes(x=year,y=mean_temp,color=group))+
-  geom_line(size=1)+
-  geom_vline(xintercept=2012,
-             linetype ="dashed",
-             size=0.5)+
-    scale_x_continuous(limits=c(1850,max(carbon_trend$year)))+
-  labs(x="Year",
-       y="Temperature Change",
-       color="Key")+
-  annotate(geom='text',
-           x=1985,
-           y=.005,
-           size=3,
-           label='Year when SDGs
-     were created')+
-  theme_minimal()
-
- #TEMP CHANGE FROM GHGS
-
-```
-
-```{r}
-library(dplyr)
-library(readr)
-library(ggplot2)
-library(plotly)
-library(ggthemes)
-url <-'https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.csv'
-carbon <-
-  read_csv(url)
-
-carbon_groups<-carbon%>%
-  mutate(group=case_when(
-    country=="World"~"World",
-    country%in%high_gdp~"High GDP",
-    country %in%low_gdp~"Low GDP",
-    TRUE~NA_character_))%>%
-  filter(!is.na(group))
-
-high_gdp<-c("United States","Qatar","Norway","Singapore","United Arab Emirates",
-            "Switzerland","Ireland","Luxembourg","Saudi Arabia","Taiwan")
-low_gdp<-c("Burundi","Central Africa Republic","Liberia","Democratic Republic of Congo",
-           "Mozambique","Niger","Madagascar","Malwai","Chad","Afghanistan")
-carbon_wo_world<-carbon%>%
-  filter(country!="World")
-
-carbon_groups<-carbon_wo_world%>%
-  mutate(group=case_when(
-    country%in%high_gdp~"High GDP",
-    country%in%low_gdp~"Low GDP",
-    TRUE~"World"))
-carbon_trend<-carbon_groups%>%
-  group_by(year,group)%>%
-  summarise(mean_temp=mean(temperature_change_from_ghg, na.rm=TRUE),
-            .groups="drop")
-plot_2<-ggplot(carbon_trend,
-       aes(x=year,y=mean_temp,color=group))+
-  geom_line(size=1)+
-  geom_vline(xintercept=2012,
-             linetype ="dashed",
-             size=0.5)+
-    scale_x_continuous(limits=c(2000,max(carbon_trend$year)))+
-  labs(x="Year",
-       y="Temperature Change",
-       color="Key")+
-  annotate(geom='text',
-           x=2008,
-           y=0.005,
-           size=3,
-           label='Year when SDGs
-     were created')+
-  theme_minimal()
-```
-
-```{r,fig.height=5,fig.width=11}
-library(ggpubr)
-ggarrange(plot_1,plot_2,nrow=1)%>%
-  annotate_figure(top=text_grob("Average Temperature Change from Greenhouse Gases from Developed and Developing Countries",size=15))
-
-```
-
-##Levelized cost of energy
-```{r}
-library(readr)
-url <- 'https://raw.githubusercontent.com/ericmkeen/sewanee_esus/master/02_energy_sector/levelized-cost-of-energy.csv'
-econ <- read_csv(url)
-econ%>%head
+The plot also marks the point in time in which the SDGs were created and some of the most current data of natural gas prices provided by Global Petrol Prices. Natural gas was seen as the most used source of energy for developed countries in Figure 3 and the second most used source of energy worldwide in 2023.
 
 
-
-```
-
-
-```{r}
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
 library(ggplot2)
 library(dplyr)
 library(readr)
@@ -238,28 +310,54 @@ p<-ggplot(econ_filtered,
                       "<br>cost:",round(cost,2))))+
   geom_point()+
   geom_vline(xintercept=2012)+
+  geom_hline(yintercept=0.48)+
   labs(title="Cost and Use of Energy Types for Developed Countries",
        x="Year",
-       y="Cost",
-       color="Energy Source")+
+       y="Cost ($/kWh)",
+       color="Energy Source",
+       subtitle="Figure 4")+
   annotate(geom='text',
            x=2003,y=0.52,
            size=3,
-           label='Year when SDGs were created')
+           label='Year when SDGs were created')+
+  annotate(geom='text',
+           x=1990, y=0.46,
+           size=3,
+           label='Current cost of natural gas')
   
 ggplotly(p,tooltip="text")
 
 ```
 
-```{r}
+Using Figure 4, we can understand that the recent cost of the renewable energy sources used by these developed countries is much lower than the current cost of natural gas. So, this 
+highlights that it's within the capabilities of these countries to shift towards more renewable energy. Despite not being on track for environment related SDGs, developed countries have the opportunity to shift towards more sustainable energy. This means that the presence of the SDGs perhaps isn’t enough to incentivize developed countries to make consistent changes in energy consumption and emission habits. 
+
+Figure 5 shows a column of the most recent data from figure 4 to better compare with the current price of natural gas (0.48 $/kWh)
+
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
 library(dplyr)
 library(knitr)
 econ_filtered<-econ%>%
-  filter(country%in% c("United States","France","Sweden","Germany","Japan","China","South Korea","United Kingdom","Netherlands","Denmark"))
+  filter(country%in% c("United States","France","Sweden","Germany","Japan","China","South Korea","United Kingdom","Netherlands","Denmark"))%>%
+  filter(year==2021)
 econ_filtered%>%
-  group_by(year,country)%>%
+  group_by(country)%>%
   summarize(cost=mean(cost, na.rm=TRUE))%>%
-  kable
+  kable(caption="Figure 5:Cost of Renewable Energy Sources for Developed Countries in 2021")
 ```
 
+# Takeaways
+
+Although there have been steady improvements in SDGs involving global health and disease control, countries are still lacking in mitigating the effects of climate change and addressing the imperative shift towards clean energy consumption. In general, the world is not on track to achieve the SDGs and sub-targets by their given time frames, and developed countries haven't done enough to lead the way for change or provide help to developing countries. This might mean that further action by the UN or simply more collaboration in global affairs needs to take place if we are to reverse the negative impacts of humanity on Earth and see a sustainable future. **There is hope, though.**
+Data like Figure 4 show that there are potential courses of action to take, and rather the main problem resides in getting a unified effort from all countries to commit to change. 
+
+# Data Sources
+
+Global Carbon Project - The Global Carbon Project is an organization that synthesizes
+information about greenhouse gases and the carbon cycle with information on the impacts of humanity on Earth. The organization was founded in 2001.
+
+IRENA - IRENA, or the Intergovernmental Renewable Energy Agency was founded with hopes of providing science-based information on sustainable, renewable energy sources and encouraging people and organizations to integrate sustainability in all areas.
+
+Our World in Data - OWID, or Our Wold in Data, is a non-profit organization that supplies extensive research and data on varying economic, social, and environmental issues.
 
