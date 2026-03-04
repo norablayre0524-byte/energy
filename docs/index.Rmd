@@ -82,9 +82,8 @@ library(readr)
 library(ggplot2)
 library(plotly)
 library(ggthemes)
-url <-'https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.csv'
-carbon <-
-  read_csv(url) 
+url <-read_csv('https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.csv')
+carbon <-url
 carbon<-carbon%>%
   mutate(gdp_per_capita=gdp/population)
 high_gdp<-c("United States","Qatar","Norway","Singapore","United Arab Emirates",
@@ -122,7 +121,8 @@ plot_1<-ggplot(carbon_trend,
   labs(x="Year",
        y="Temperature Change (Celcius)",
        color="Key",
-       caption="Figure 2a")+
+       caption="Figure 2a",
+       title="Temperature Change from Greenhouse Gas Emmissions")+
   annotate(geom='text',
            x=1985,
            y=.005,
@@ -209,7 +209,7 @@ It’s clear that the trends are not changing before and after when the SDGs wer
 
  One of the essential ways the time of energy transition needs to change to create a sustainable future is using renewable energy and energy that doesn’t require greenhouse gases to be emitted when it is being sourced or consumed. Therefore, one way we can measure environmental progress in the SDGs is by looking at the breakdown of how much of each energy type countries are using now compared to the past. Figure 3 shows the energy breakdown for the same set of developed countries and developing countries as well as worldwide data for 2012, when the SDGs were put in place, and 2023, the most recent data from the energy data set.
 
-```{r,fig.height=7,fig.width=10,echo=FALSE,message=FALSE,warning=FALSE}
+```{r,fig.height=5.5,fig.width=10,echo=FALSE,message=FALSE,warning=FALSE}
 library(readr)
 library(dplyr)
 library(ggplot2)
@@ -257,12 +257,24 @@ energy_graph<-ggplot(energy_groups_no_total,
   scale_y_continuous(labels=scales::percent)+
   facet_wrap(~Year)+
   coord_flip()+
-labs(title="Energy Breakdown for Developed and Developing Countries",
+labs(title="The Global Energy Shift: Progress or Regression?",
+     subtitle="Energy Breakdown for Developed and Developing Countries",
      x="Development Status of Countries",
      y="Percent of Energy Type",
-     subtitle="Figure 3")+
+     caption="Figure 3")+
   theme_dark()
-ggplotly(energy_graph)
+ggplotly(energy_graph,tooltip="text")%>%
+  layout(title=list(text=paste0(
+    "The Global Energy Shift: Progress or Regression?",
+    "<br><sup>Energy Breakdown for Developed and Developing Countries</sup>"
+  ), x=0.5
+  ), margin=list(t=120),
+  annotations=list(list(text="Figure 3",
+                        x=0,
+                        y=-0.14,
+                        xref="paper",
+                        yref="paper",
+                        showarrow=FALSE)))
 
 ```
 
@@ -287,7 +299,7 @@ The plot also marks the point in time in which the SDGs were created and some of
 (#Energy-Distribution)the second most used source of energy worldwide in 2023.
 
 
-```{r,echo=FALSE,message=FALSE,warning=FALSE}
+```{r,echo=FALSE,message=FALSE,warning=FALSE, fig.height=5}
 library(ggplot2)
 library(dplyr)
 library(readr)
@@ -309,11 +321,10 @@ p<-ggplot(econ_filtered,
   geom_point()+
   geom_vline(xintercept=2012)+
   geom_hline(yintercept=0.48)+
-  labs(title="Cost and Use of Energy Types for Developed Countries",
-       x="Year",
-       y="Cost ($/kWh)",
+  labs(title="The Price of Power",
+       subtitle="The Cost and Use of Energy Types for Developed Countries",
        color="Energy Source",
-       subtitle="Figure 4")+
+       caption="Figure 4")+
   annotate(geom='text',
            x=2003,y=0.52,
            size=3,
@@ -323,7 +334,17 @@ p<-ggplot(econ_filtered,
            size=3,
            label='Current cost of natural gas')
   
-ggplotly(p,tooltip="text")
+ggplotly(p,tooltip="text")%>%
+  layout(title=list(text=paste0(
+    "The Price of Power",
+    "<br><sup>The Cost of Energy Types for Developed Countries</sup>"
+  )),
+  annotations=list(list(text="Figure 4",
+                        x=0,
+                        y=-0.10,
+                        xref="paper",
+                        yref="paper",
+                        showarrow=FALSE)))
 
 ```
 
@@ -335,18 +356,23 @@ Figure 5 shows a column of the most recent data from figure 4 to better compare 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE}
 library(dplyr)
 library(knitr)
+library(kableExtra)
 econ_filtered<-econ%>%
   filter(country%in% c("United States","France","Sweden","Germany","Japan","China","South Korea","United Kingdom","Netherlands","Denmark"))%>%
   filter(year==2021)
 econ_filtered%>%
   group_by(country)%>%
   summarize(cost=mean(cost, na.rm=TRUE))%>%
-  kable(caption="Figure 5:Cost of Renewable Energy Sources for Developed Countries in 2021")
+  kable(caption="<b stle='font-size:20px;'>Figure 5 (The Price of Power: Cost of Renewable Energy Sources for Developed Countries in 2021)",
+        col.names=NULL,
+        escape=FALSE,
+        align="c")%>%
+  kable_styling(full_width=FALSE)
 ```
 
 # Takeaways
 
-Although there have been steady improvements in SDGs involving global health and disease control, countries are still lacking in mitigating the effects of climate change and addressing the imperative shift towards clean energy consumption. In general, the world is not on track to achieve the SDGs and sub-targets by their given time frames, and developed countries haven't done enough to lead the way for change or provide help to developing countries. This might mean that further action by the UN or simply more collaboration in global affairs needs to take place if we are to reverse the negative impacts of humanity on Earth and see a sustainable future. Additionally, unified efforts by the general public are as needed as ever during such a pivotal time.**there is hope, though.**Data like figure 4 show that there are potential courses of action to take, and rather the main problem resides in getting a unified effort from all countries to commit to change. This change would nurture a better, safer future not just for us but for future generations, as well.
+Although there have been steady improvements in SDGs involving global health and disease control, countries are still lacking in mitigating the effects of climate change and addressing the imperative shift towards clean energy consumption. In general, the world is not on track to achieve the SDGs and sub-targets by their given time frames, and developed countries haven't done enough to lead the way for change or provide help to developing countries. This might mean that further action by the UN or simply more collaboration in global affairs needs to take place if we are to reverse the negative impacts of humanity on Earth and see a sustainable future. Additionally, unified efforts by the general public are as needed as ever during such a pivotal time.**There is hope, though.**Data like figure 4 show that there are potential courses of action to take, and rather the main problem resides in getting a unified effort from all countries to commit to change. This change would nurture a better, safer future not just for us but for future generations, as well.
 
 # Data Sources
 
