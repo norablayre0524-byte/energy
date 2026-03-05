@@ -1,18 +1,24 @@
 ---
-title: "Progress of the Sustainable Development Goals"
+title: "Energy Transition and Navigating Unprecedented Times"
 author: "Nora Stanley"
 date: "2026-02-10"
 output: html_document
 ---
 
 # Introduction
-How close are we to saving the world? Well, it’s hard to say, but this series of data can be used to understand how much progress has been made for SDGs which are excellent markers on how much human destruction has been reversed. Specifically, the data connects to SDG #7(Affordable and Clean Energy),SDG #11(Sustainable Cities and Communities),SDG #12(Responsible Consumption and Production), and SDG #13(Climate Action). Taking these goals and their sub-targets into account, we can understand which areas have made marginal gains, which areas have made minimal gains, and which ones have made no gains or even regressed. The true meaning of the data can be found when the data is applied to the whole picture of the UN’s fight for a sustainable future: all areas must be addressed to see improvement. Although some data points are frightening, they provide clear direction on how to further attack the issues associated with energy transition and climate change. The SDGs will continue to be important tools for realizing a better future as we try to combat the ruin of climate change and irresponsible energy management. 
+Sometimes when we think about the environment it's hard to understand how we individually impact the state of the world, but when we broaden our scope, the picture becomes a bit more clear. This compilation of data can be used to understand how much progress has been made for SDGs which are excellent markers on how much human destruction has been reversed. Specifically, the data connects to SDG #7(Affordable and Clean Energy),SDG #11(Sustainable Cities and Communities),SDG #12(Responsible Consumption and Production), and SDG #13(Climate Action). Taking these goals and their sub-targets into account, we can understand which areas have made marginal gains, which areas have made minimal gains, and which ones have made no gains or even regressed. 
+
+The true meaning of the data can be found when the data is applied to the whole picture of the UN’s fight for a sustainable future: all areas must be addressed to see improvement. Although some data points are frightening, they provide clear direction on how to further attack the issues associated with energy transition and climate change. The SDGs will continue to be important tools for realizing a better future as we try to combat the ruin of climate change and irresponsible energy management. 
+
 
 # The Story: Determining Progress of the SDGs
 
 ## *Social Progress*
 
-One of the main reasons climate change is so concerning is the potential risks of human health and life that are at stake. There are already many environmental factors that are already beginning to affect public health and death rates including air pollution, unclean water, contamination in food supply, and exposure to harmful chemicals. Therefore, death rates could be used to also demonstrate reduced environmental related deaths, a key component of SDG #3 (Good Health and Well-Being). If efficient work has been done in this sector, it will be reflected in an increased life expectancy for all countries and a gap being bridged between developed countries and developing countries. Distinguishing between these two types of countries is very important as the UN repeatedly highlights the need for developed countries to aid developing countries in their efforts to meet the SDGs. And the need for this togetherness is no different for climate issues. Again, this emphasizes why working together despite differences of past conflicts is so integral to meeting the SDGs and supporting a sustainable world. In figure 1., the average life expectancy for citizens of 3 developed countries, the United States, France, andChina, and 3 developing countries, Haiti, Ethiopia, and Liberia, across time is shown. 
+One of the main reasons climate change is so concerning is the potential risks of human health and life that are at stake. There are already many environmental factors that are already beginning to affect public health and death rates including air pollution, unclean water, contamination in food supply, and exposure to harmful chemicals. Therefore, death rates could be used to also demonstrate reduced environmental related deaths, a key component of SDG #3 (Good Health and Well-Being). If efficient work has been done in this sector, it will be reflected in an increased life expectancy for all countries and a gap being bridged between developed countries and developing countries. Distinguishing between these two types of countries is very important as the UN repeatedly highlights the need for developed countries to aid developing countries in their efforts to meet the SDGs. And the need for this togetherness is no different for climate issues. Again, this emphasizes why working together despite differences of past conflicts is so integral to meeting the SDGs and supporting a sustainable world.
+
+ In figure 1., the average life expectancy for citizens of 3 developed countries, the United States, France, and China, and 3 developing countries, Haiti, Ethiopia, and Liberia, across time is given.
+
 
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE}
@@ -42,7 +48,12 @@ ggplot(gap,
   theme_tufte()
 ```
 
-The gapminder dataset which pulled this information only has data until 2007, 5 years before the SDGs were created; however, it can still be an important tool as a snapshot of pre-SDG conditions which can be compared to current day conditions. The UN hoped SDGs would incentivize  countries to improve their health standards and disease control, and we can look at the most recent data for life expectancy to see if they have done that. The World Bank Group supplies information about the life expectancy for each of these countries in 2023: the United States and China had a life expectancy of 78, France had a life expectancy of 83, Ethiopia had a life expectancy of 67, Haiti had a life expectancy of 65, and Liberia had a life expectancy of 62. It’s apparent that there was improvement in life expectancy in each country from 2007 to 2023, especially in Haiti and Liberia. There is no doubt progress was made between these years. Additionally, this data reflects a huge gap bridged between the life expectancy of developed countries and that of developing countries. Even the sources of these leaps can be hard to trace with this data alone, reduced death rates, in general, point to reduced health impacts of environmental issues. Overall, the plot in combination with the most recent life expectancy values proposed that this set of countries is working to reduce death rates, and, in turn, climate related death rates. They could be used to show general trends for all developed and developing countries, but because the sample size is so small, these trends should not be considered concrete when looking at the rest of the world. But, there’s still reason to celebrate this growth. The increased life expectancy rates demonstrate that international cooperation can tackle global problems. It’s indisputable that developing countries could not have seen so much progress without the support of developed countries. Beautifully coordinated efforts were essential here, and it goes to show that global collaboration is possible to reduce climate impacts and rescue our home. 
+The gapminder dataset which pulled this information only has data until 2007, 5 years before the SDGs were created; however, it can still be an important tool as a snapshot of pre-SDG conditions which can be compared to current day conditions. The UN hoped SDGs would incentivize  countries to improve their health standards and disease control, and we can look at the most recent data for life expectancy to see if they have done that. 
+
+The World Bank Group supplies information about the life expectancy for each of these countries in 2023: the United States and China had a life expectancy of 78, France had a life expectancy of 83, Ethiopia had a life expectancy of 67, Haiti had a life expectancy of 65, and Liberia had a life expectancy of 62. It’s apparent that there was improvement in life expectancy in each country from 2007 to 2023, especially in Haiti and Liberia. There is no doubt progress was made between these years. Additionally, this data reflects a huge gap bridged between the life expectancy of developed countries and that of developing countries. Even though the sources of these leaps can be hard to trace with this data alone, reduced death rates point to reduced health impacts of environmental issues. 
+
+Overall, the plot in combination with the most recent life expectancy values proposed that this set of countries is working to reduce death rates, and, in turn, climate related death rates. They could be used to show general trends for all developed and developing countries, but because the sample size is so small, these trends should not be considered concrete when looking at the rest of the world. But, there’s still reason to celebrate this growth. The increased life expectancy rates demonstrate that international cooperation can tackle global problems. It’s indisputable 
+ 
 
 
 ## *Effects of Emissions*
@@ -202,7 +213,11 @@ ggarrange(plot_1,plot_2,nrow=1)%>%
 
 ```
 
-It’s clear that the trends are not changing before and after when the SDGs were created, meaning that, in general, all countries are not taking appropriate action to mitigate impacts of greenhouse gases. This suggests that greenhouse gas emissions are not being reduced, as well; therefore, a key contributor to the catastrophic future we are on track for is being ignored. Angry, yet? In addition, high GDP per capita or developed countries are disproportionately contributing to the problem compared to low GDP per capita or developing countries. These indicators are signs that both developed and developing countries are not on track to meet the targets associated with SDG #12 (responsible consumption and production) and SDG #13 (climate action), and developed countries are not playing their part in assisting developing countries. Up till now we’ve discussed these failures in terms of countries, and let’s clarify that at the heart of these countries is the government, oftentimes a complacent or corrupt government. Consequently, individual voices are more necessary than ever before to ensure around the world governments are acknowledging and actively implementing solutions for climate change. Even if it requires systems that have been in place for years to be reconstructed, governments should and must act for the great good of the people which certainly is not allowing for the future we are on track to realize. Additionally, differences between the developed countries contribution to the problem and the developing countries contribution to the problem suggests that SDG #17(partnerships for the goals) is being neglected. Although joint initiative in global issues like climate change is feasible, governments simply have prioritized other global affairs and conflicts which is amusing because environmental problems are undoubtedly among the biggest shapers of our future. All countries are falling short; this doesn’t have to be accepted, though. Everyone using their voice can allow us to reimagine our future, and those who do not use their voice are complicit in the governments’ idleness. 
+It’s clear that the trends are not changing before and after when the SDGs were created, meaning that, in general, all countries are not taking appropriate action to mitigate impacts of greenhouse gases. This suggests that greenhouse gas emissions are not being reduced, as well; therefore, a key contributor to the catastrophic future we are on track for is being ignored. Angry, yet? In addition, high GDP per capita or developed countries are disproportionately contributing to the problem compared to low GDP per capita or developing countries. These indicators are signs that both developed and developing countries are not on track to meet the targets associated with SDG #12 (responsible consumption and production) and SDG #13 (climate action), and developed countries are not playing their part in assisting developing countries. 
+
+Up till now we’ve discussed these failures in terms of countries, and let’s clarify that at the heart of these countries is the government, oftentimes a complacent or corrupt government. Consequently, individual voices are more necessary than ever before to ensure around the world governments are acknowledging and actively implementing solutions for climate change. Even if it requires systems that have been in place for years to be reconstructed, governments should and must act for the greater good of the people which certainly is not allowing for the future we are on track to realize. Additionally, differences between the developed countries contribution to the problem and the developing countries contribution to the problem suggests that SDG #17(partnerships for the goals) is being neglected. 
+
+Although joint initiative in global issues like climate change is feasible, governments simply have prioritized other global affairs and conflicts which is amusing because environmental problems are undoubtedly among the biggest shapers of our future. All countries are falling short; this doesn’t have to be accepted, though. Everyone using their voice can allow us to reimagine our future, and those who do not use their voice are complicit in the governments’ idleness. 
 
 
 ## *Energy Distribution*
@@ -263,7 +278,8 @@ labs(title="The Global Energy Shift: Progress or Regression?",
      y="Percent of Energy Type",
      caption="Figure 3")+
   theme_dark()
-ggplotly(energy_graph,tooltip="text")%>%
+
+ggplotly(energy_graph)%>%
   layout(title=list(text=paste0(
     "The Global Energy Shift: Progress or Regression?",
     "<br><sup>Energy Breakdown for Developed and Developing Countries</sup>"
@@ -278,7 +294,12 @@ ggplotly(energy_graph,tooltip="text")%>%
 
 ```
 
-  Worldwide and in low GDP/developing countries marginal gains in using more renewable energy and less non-renewable energy have been made; however, high GDP/developed countries have actually regressed and are now using more no-renewable energy than when the SDGs were introduced. This means that shifts toward renewable energy and reducing energy-consumption related emissions are not on track. Key points of the sub-targets in both of these SDGs are encouraging worldwide climate progress and countries incentivizing one another to move towards sustainable energy practices, and it’s clear that neither of these are happening. Despite increased awareness of climate impacts, governments are still allowing more non-renewable sources to be used and are not creating policies that restrict the use of non-renewable energy. Essentially, they are sacrificing public health so that the energy systems already put in place do not have to be changed. Furthermore, developed countries with the most resources to make change are not doing their part in leading the shift towards a sustainable future in energy transition which means they can’t effectively aid developing countries in making significant progress. This lack of leadership also signals that SDG #17 (partnerships for the goals) is not being met, and SDG #11 (sustainable cities and communities) is not seeing enough progress because it is not being reflected in the global and national scale data provided by Figure 3. Considering the full picture, not enough meaningful progress is being made to combat energy-consumption related emissions and overuse of non-renewable energy sources. Effective energy transition will likely be costly and require work in order to rework current energy systems, but it is a justified investment into a promising future.
+Worldwide and in low GDP/developing countries marginal gains in using more renewable energy and less non-renewable energy have been made; however, high GDP/developed countries have actually regressed and are now using more no-renewable energy than when the SDGs were introduced. This means that shifts toward renewable energy and reducing energy-consumption related emissions are not on track. Key points of the sub-targets in both of these SDGs are encouraging worldwide climate progress and countries incentivizing one another to move towards sustainable energy practices, and it’s clear that neither of these are happening. 
+
+Despite increased awareness of climate impacts, governments are still allowing more non-renewable sources to be used and are not creating policies that restrict the use of non-renewable energy. Essentially, they are sacrificing public health so that the energy systems already put in place do not have to be changed. Furthermore, developed countries with the most resources to make change are not doing their part in leading the shift towards a sustainable future in energy transition which means they can’t effectively aid developing countries in making significant progress. This lack of leadership also signals that SDG #17 (partnerships for the goals) is not being met, and SDG #11 (sustainable cities and communities) is not seeing enough progress because it is not being reflected in the global and national scale data provided by Figure 3. 
+
+Considering the full picture, not enough meaningful progress is being made to combat energy-consumption related emissions and overuse of non-renewable energy sources. Effective energy transition will likely be costly and require work in order to rework current energy systems, but it is a justified investment into a promising future.
+
 
 ## *Cost of Energy*
 
@@ -324,7 +345,8 @@ p<-ggplot(econ_filtered,
   labs(title="The Price of Power",
        subtitle="The Cost and Use of Energy Types for Developed Countries",
        color="Energy Source",
-       caption="Figure 4")+
+       caption="Figure 4",
+       y="Cost ($/kWh)")+
   annotate(geom='text',
            x=2003,y=0.52,
            size=3,
@@ -350,7 +372,8 @@ ggplotly(p,tooltip="text")%>%
 
 Using Figure 4, we can understand that the recent cost of the renewable energy sources used by these developed countries is much lower than the current cost of natural gas. So, this highlights that it's within the capabilities of these countries to shift towards more renewable energy. Despite not being on track for environment related SDGs, developed countries have the opportunity to shift towards more sustainable energy; they simply aren’t doing it.This means that the presence of the SDGs perhaps isn’t enough to incentivize developed countries to make consistent changes in energy consumption and emission habits. More action will be realized when individual voices make themselves heard. Although we didn’t create the problems, it’s up to us to stop contributing to systems that do and to be proactive in advocacy for change. 
 
-Figure 5 shows a column of the most recent data from figure 4 to better compare with the current price of natural gas (0.48 $/kWh)
+Figure 5 provides a column of the most recent data from Figure 4 to better compare with the current price of natural gas (0.48 $/kWh).
+
 
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE}
@@ -364,15 +387,15 @@ econ_filtered%>%
   group_by(country)%>%
   summarize(cost=mean(cost, na.rm=TRUE))%>%
   kable(caption="<b stle='font-size:20px;'>Figure 5 (The Price of Power: Cost of Renewable Energy Sources for Developed Countries in 2021)",
-        col.names=NULL,
         escape=FALSE,
-        align="c")%>%
-  kable_styling(full_width=FALSE)
+        align="c")
 ```
 
 # Takeaways
 
-Although there have been steady improvements in SDGs involving global health and disease control, countries are still lacking in mitigating the effects of climate change and addressing the imperative shift towards clean energy consumption. In general, the world is not on track to achieve the SDGs and sub-targets by their given time frames, and developed countries haven't done enough to lead the way for change or provide help to developing countries. This might mean that further action by the UN or simply more collaboration in global affairs needs to take place if we are to reverse the negative impacts of humanity on Earth and see a sustainable future. Additionally, unified efforts by the general public are as needed as ever during such a pivotal time.**There is hope, though.**Data like figure 4 show that there are potential courses of action to take, and rather the main problem resides in getting a unified effort from all countries to commit to change. This change would nurture a better, safer future not just for us but for future generations, as well.
+Although there have been steady improvements in SDGs involving global health and disease control, countries are still lacking in mitigating the effects of climate change and addressing the imperative shift towards clean energy consumption. In general, the world is not on track to achieve the SDGs and sub-targets by their given time frames, and developed countries haven't done enough to lead the way for change or provide help to developing countries. This might mean that further action by the UN or simply more collaboration in global affairs needs to take place if we are to reverse the negative impacts of humanity on Earth and see a sustainable future. Additionally, unified efforts by the general public are as needed as ever during such a pivotal time. 
+
+There is hope, though. Data like Figure 4 insinuate that there are potential courses of action to take, and rather the main problem resides in getting a unified effort from all countries to commit to change. This change would nurture a better, safer future not just for us but for our children and grandchildren, as well.
 
 # Data Sources
 
